@@ -10,14 +10,20 @@ function Inventory() {
     const [showAddProductModal, setShowAddProductModal] = useState(false);
     const [newProduct, setNewProduct] = useState({ product_name: '', qty_balance: 0, unit_cost: 0, selling_price: 0, unit_of_measure: '', unit_size: '' });
     const [currentProduct, setCurrentProduct] = useState(null);
-    const [products, setProducts] = useState([]); // Initialize as an empty array
+    const [products, setProducts] = useState([]); 
     const [selectedProduct, setSelectedProduct] = useState('');
     const [selectedProductID, setSelectedProductID] = useState('');
     const [searchTerm, setSearchTerm] = useState('');
-    const [addQuantity, setAddQuantity] = useState(0); // State for quantity to add
+    const [addQuantity, setAddQuantity] = useState(0); 
 
     const branchId = localStorage.getItem('branch_id');
     const [branchName, setBranchName] = useState();
+
+    // State variables for user inputs
+    const [productValueCost, setProductValueCost] = useState(0);
+    const [productValueSellingPrice, setProductValueSellingPrice] = useState(0);
+    const [unitCost, setUnitCost] = useState(0);
+    const [sellingPrice, setSellingPrice] = useState(0);
 
     const handleShowCreateModal = () => setShowCreateModal(true);
     const handleCloseCreateModal = () => setShowCreateModal(false);
@@ -31,12 +37,12 @@ function Inventory() {
     const handleShowAddProductModal = () => setShowAddProductModal(true);
     const handleCloseAddProductModal = () => {
         setSelectedProduct('');
-        setAddQuantity(0); // Reset state when closing modal
+        setAddQuantity(0); 
         setShowAddProductModal(false);
     };
 
     const handleCreateProduct = async () => {
-        const companyId = "12345";
+        const companyId = localStorage.getItem('async_client_profile_id');
         const branchId = localStorage.getItem('branch_id');
         const syncid = 'abcd123';
 
@@ -74,35 +80,6 @@ function Inventory() {
         setItems(updatedItems);
     };
 
-    // const handleAddProductToStock = () => {
-    //     if (!selectedProduct || addQuantity <= 0) {
-    //         alert('Please select a product and enter a valid quantity.');
-    //         return;
-    //     }
-
-    //     const productToPost = {
-    //         product_name: selectedProduct,
-    //         quantity: addQuantity,
-    //     };
-
-    //     fetch(`${API_URL}/inventorymgt`, {
-    //         method: "POST",
-    //         headers: {
-    //             'Content-Type': 'application/json'
-    //         },
-    //         body: JSON.stringify(productToPost)
-    //     }).then(res => {
-    //         if (res.status === 200) {
-    //             alert('Product added to stock successfully');
-    //             window.location.href = 'http://localhost:3000/inventory';
-    //         }
-    //     }).catch((err) => {
-    //         console.log(err.message);
-    //     });
-
-    //     handleCloseAddProductModal();
-    // };
-
     const handleAddProductToStock = () => {
         if (!selectedProduct || addQuantity <= 0) {
             alert('Please select a product and enter a valid quantity.');
@@ -110,22 +87,22 @@ function Inventory() {
         }
 
         const productToPost = {
-            company_id: "12345", 
-            branch_id: localStorage.getItem('branch_id'), 
-            sale_records_id: "sale123", 
-            branch_location_notes: "Main Branch", 
-            product_id: selectedProductID, 
-            date_time: new Date().toISOString(), 
-            qty_purchased: addQuantity, 
-            qty_sold: 0, 
-            qty_balance: addQuantity, 
-            product_value_cost: 10.00, 
-            product_value_selling_price: 15.00, 
-            unit_cost: 10.00, 
-            selling_price: 15.00, 
-            syncid: 'abcd123', 
+            company_id: localStorage.getItem('async_client_profile_id'),
+            branch_id: localStorage.getItem('branch_id'),
+            sale_records_id: "sale123",
+            branch_location_notes: "Main Branch",
+            product_id: selectedProductID,
+            date_time: new Date().toISOString(),
+            qty_purchased: addQuantity,
+            qty_sold: 0,
+            qty_balance: addQuantity,
+            product_value_cost: parseFloat(productValueCost), 
+            product_value_selling_price: parseFloat(productValueSellingPrice), 
+            unit_cost: parseFloat(unitCost), 
+            selling_price: parseFloat(sellingPrice), 
+            syncid: 'abcd123',
         };
-    
+
         fetch(`${API_URL}/inventorymgt`, {
             method: "POST",
             headers: {
@@ -143,10 +120,11 @@ function Inventory() {
             console.log(err.message);
             alert('An error occurred while adding the product.');
         });
-    
+
         handleCloseAddProductModal();
     };
-    
+
+
 
     useEffect(() => {
         fetch(`${API_URL}/branches/${branchId}`)
@@ -171,7 +149,7 @@ function Inventory() {
         fetch(`${API_URL}/productdefinition`)
             .then(res => res.json())
             .then(resp => {
-                setProducts(resp); // Set products to the fetched data
+                setProducts(resp); 
             })
             .catch(err => console.log(err.message));
     }, []);
@@ -263,30 +241,6 @@ function Inventory() {
                                 onChange={(e) => setNewProduct({ ...newProduct, product_name: e.target.value })}
                             />
                         </Form.Group>
-                        <Form.Group controlId="productQuantity" className="mt-3">
-                            <Form.Label>Quantity</Form.Label>
-                            <Form.Control
-                                type="number"
-                                value={newProduct.qty_balance}
-                                onChange={(e) => setNewProduct({ ...newProduct, qty_balance: parseInt(e.target.value) })}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="unitCost" className="mt-3">
-                            <Form.Label>Unit Cost</Form.Label>
-                            <Form.Control
-                                type="number"
-                                value={newProduct.unit_cost}
-                                onChange={(e) => setNewProduct({ ...newProduct, unit_cost: parseFloat(e.target.value) })}
-                            />
-                        </Form.Group>
-                        <Form.Group controlId="sellingPrice" className="mt-3">
-                            <Form.Label>Selling Price</Form.Label>
-                            <Form.Control
-                                type="number"
-                                value={newProduct.selling_price}
-                                onChange={(e) => setNewProduct({ ...newProduct, selling_price: parseFloat(e.target.value) })}
-                            />
-                        </Form.Group>
                         <Form.Group controlId="unitOfMeasure" className="mt-3">
                             <Form.Label>Unit of Measure</Form.Label>
                             <Form.Control
@@ -354,14 +308,6 @@ function Inventory() {
                                 onChange={(e) => setCurrentProduct({ ...currentProduct, selling_price: parseFloat(e.target.value) })}
                             />
                         </Form.Group>
-                        <Form.Group controlId="unitOfMeasure" className="mt-3">
-                            <Form.Label>Unit of Measure</Form.Label>
-                            <Form.Control
-                                type="text"
-                                value={currentProduct?.unit_of_measure || ''}
-                                onChange={(e) => setCurrentProduct({ ...currentProduct, unit_of_measure: e.target.value })}
-                            />
-                        </Form.Group>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -373,6 +319,7 @@ function Inventory() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
 
             {/* Add Product Modal */}
             <Modal show={showAddProductModal} onHide={handleCloseAddProductModal}>
@@ -394,9 +341,9 @@ function Inventory() {
                             id="input-group-dropdown-2"
                         >
                             {products.map(product => (
-                                <Dropdown.Item key={product.product_id}  onClick={() => {
+                                <Dropdown.Item key={product.product_id} onClick={() => {
                                     setSelectedProduct(product.product_name);
-                                    setSelectedProductID(product.product_id); 
+                                    setSelectedProductID(product.product_id);
                                 }}>
                                     {product.product_name}
                                 </Dropdown.Item>
@@ -415,6 +362,38 @@ function Inventory() {
                             onChange={(e) => setAddQuantity(parseInt(e.target.value) || 0)}
                         />
                     </Form.Group>
+                    <Form.Group controlId="productValueCost" className="mt-3">
+                        <Form.Label>Product Value Cost</Form.Label>
+                        <Form.Control
+                            type="number"
+                            value={productValueCost}
+                            onChange={(e) => setProductValueCost(parseFloat(e.target.value) || 0)}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="productValueSellingPrice" className="mt-3">
+                        <Form.Label>Product Value Selling Price</Form.Label>
+                        <Form.Control
+                            type="number"
+                            value={productValueSellingPrice}
+                            onChange={(e) => setProductValueSellingPrice(parseFloat(e.target.value) || 0)}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="unitCost" className="mt-3">
+                        <Form.Label>Unit Cost</Form.Label>
+                        <Form.Control
+                            type="number"
+                            value={unitCost}
+                            onChange={(e) => setUnitCost(parseFloat(e.target.value) || 0)}
+                        />
+                    </Form.Group>
+                    <Form.Group controlId="sellingPrice" className="mt-3">
+                        <Form.Label>Selling Price</Form.Label>
+                        <Form.Control
+                            type="number"
+                            value={sellingPrice}
+                            onChange={(e) => setSellingPrice(parseFloat(e.target.value) || 0)}
+                        />
+                    </Form.Group>
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseAddProductModal}>
@@ -425,6 +404,7 @@ function Inventory() {
                     </Button>
                 </Modal.Footer>
             </Modal>
+
         </Container>
     );
 }

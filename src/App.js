@@ -27,6 +27,9 @@ import PosHome from './Pos/pos';
 import Inventory from './Pos/inventory';
 import PettyCash from './Pos/pettyCash';
 import AccReg from './AccountReg';
+import OpenShift from './Pos/openShift';
+import PosGasDash from './PosGas/PosGas';
+import SalesShift from './PosGas/SalesShift';
 
 function App() {
 
@@ -67,7 +70,10 @@ function App() {
           <Route path='/pos' element={<PosHome />}></Route>
           <Route path='/inventory' element={<Inventory />}></Route>
           <Route path='/pettycash' element={<PettyCash />}></Route>
+          <Route path='/openshift' element={<OpenShift />}></Route>
           <Route path='/account/registration' element={<AccReg />}></Route>
+          <Route path='posgas' element={<PosGasDash/>}></Route>
+          <Route path='saleshift' element={<SalesShift/>}></Route>
         </Routes>
       </div>
     </BrowserRouter >

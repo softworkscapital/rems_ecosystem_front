@@ -34,7 +34,7 @@ const SideBar = () => {
                 <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css" />
             </head>
             <body>
-                <div class="nav-left-sidebar sidebar-dark" style={{fontSize: '10px'}}>
+                <div class="nav-left-sidebar sidebar-dark"  style={{fontSize: '10px', backgroundColor: '#B03F82'}}>
                     <div class="menu-list">
 
                         <nav className="navbar navbar-expand-lg navbar-light">
@@ -44,35 +44,35 @@ const SideBar = () => {
                             </button>
                             <div className={`collapse navbar-collapse${isMenuOpen ? ' show' : ''}`}>
                                 <ul className="navbar-nav flex-column">
-                                    <li className="nav-divider">
+                                    <li className="nav-divider" style={{color: '#fff'}}>
                                         Menu
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link active" href="findashboard" style={{fontSize: '12px'}}   >Dashboard <span className="badge badge-success">6</span></a>
+                                        <a className="nav-link active" href="findashboard"style={{fontSize: '12px', color:'#fff'}}   >Dashboard <span className="badge badge-success">6</span></a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/accounts" style={{fontSize: '12px'}}>Accounts</a>
+                                        <a className="nav-link" href="/accounts"style={{fontSize: '12px', color:'#fff'}}>Accounts</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/accountmap" style={{fontSize: '12px'}}>Account Map</a>
+                                        <a className="nav-link" href="/accountmap"style={{fontSize: '12px', color:'#fff'}}>Account Map</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/income" style={{fontSize: '12px'}}>Income</a>
+                                        <a className="nav-link" href="/income"style={{fontSize: '12px', color:'#fff'}}>Income</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/directexpenses" style={{fontSize: '12px'}}>Direct Expenses</a>
+                                        <a className="nav-link" href="/directexpenses"style={{fontSize: '12px', color:'#fff'}}>Direct Expenses</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/expenses" style={{fontSize: '12px'}}>Admin Expenses</a>
+                                        <a className="nav-link" href="/expenses"style={{fontSize: '12px', color:'#fff'}}>Admin Expenses</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/cashbank" style={{fontSize: '12px'}}>Banks & Cash</a>
+                                        <a className="nav-link" href="/cashbank"style={{fontSize: '12px', color:'#fff'}}>Banks & Cash</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/projects" style={{fontSize: '12px'}}>Projects</a>
+                                        <a className="nav-link" href="/projects"style={{fontSize: '12px', color:'#fff'}}>Projects</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/costcenter" style={{fontSize: '12px'}}>Cost Center</a>
+                                        <a className="nav-link" href="/costcenter"style={{fontSize: '12px', color:'#fff'}}>Cost Center</a>
                                     </li>
 
 

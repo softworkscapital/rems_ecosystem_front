@@ -34,7 +34,7 @@ const SideBar = () => {
                 <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css" />
             </head>
             <body>
-                <div class="nav-left-sidebar sidebar-dark">
+                <div class="nav-left-sidebar sidebar-dark"  style={{fontSize: '10px', backgroundColor: '#B03F82'}}>
                     <div class="menu-list">
                         {/* <nav class="navbar navbar-expand-lg navbar-light">
                             <a class="d-xl-none d-lg-none" href="0">Dashboard</a>
@@ -75,21 +75,21 @@ const SideBar = () => {
                             </button>
                             <div className={`collapse navbar-collapse${isMenuOpen ? ' show' : ''}`}>
                                 <ul className="navbar-nav flex-column">
-                                    <li className="nav-divider">
+                                    <li className="nav-divider" style={{color: '#fff'}}>
                                         Menu
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link active" href="funnel">Dashboard <span className="badge badge-success">6</span></a>
+                                        <a className="nav-link active" style={{fontSize: '12px', color:'#fff'}} href="funnel">Dashboard</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/prospect">Add Prospect</a>
+                                        <a className="nav-link" style={{fontSize: '12px', color:'#fff'}} href="/prospect">Add Prospect</a>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href="/followup">Follow Up</a>
+                                        <a className="nav-link" style={{fontSize: '12px', color:'#fff'}} href="/followup">Follow Up</a>
                                     </li>
                                     {isAdmin &&
                                         <li className="nav-item">
-                                            <a className="nav-link" href="/newuser">Add User</a>
+                                            <a className="nav-link" style={{fontSize: '12px', color:'#fff'}} href="/newuser">Add User</a>
                                         </li>
                                     }
                                     <li className="nav-item" style={{ marginTop: '340px', color: 'white' }}>

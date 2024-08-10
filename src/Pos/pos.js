@@ -27,6 +27,21 @@ function PosHome() {
   const companyId = localStorage.getItem('async_client_profile_id');
   const branchId = localStorage.getItem('branch_id');
 
+  const shiftId =  localStorage.getItem('shiftId');
+
+
+  const formatTime = (dateTime) => {
+    if (!dateTime) return '';
+    const date = new Date(dateTime);
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+};
+
+
+
+const shiftOpenTime =  localStorage.getItem('dateTimeOpen');
+
+const displayTime = formatTime(shiftOpenTime);
+
   const [customerName, setCustomerName] = useState('');
 
   useEffect(() => {
@@ -134,8 +149,42 @@ function PosHome() {
     setAmountGiven('');
     setChange(0);
     setQuantity(1);
-    setBillingAddress(''); // Clear billing address
+    setBillingAddress(''); 
   };
+
+  const handleCompletePurchase = async () => {
+    const saleRecords = await selectedGoods.map(good => ({
+        sale_records_id: Number(shiftId) || 1,
+        product_id: good.product_id,
+        quantity: good.quantity,
+        unit_cost: good.selling_price,
+        selling_price: good.selling_price + (good.selling_price * vat), 
+    }));
+
+    console.log(saleRecords); 
+
+    try {
+        const response = await fetch(`${API_URL}/salelist`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(saleRecords),
+        });
+
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const result = await response.json();
+        alert('Purchase completed successfully!'); 
+        handleClearTransaction();
+    } catch (error) {
+        console.error('Error completing purchase:', error);
+        alert('An error occurred while completing the purchase.');
+    }
+};
+
 
   const BillingAddress = () => (
     <address>
@@ -295,7 +344,7 @@ function PosHome() {
             </div>
 
             <div className="d-flex justify-content-between px-4">
-              <button className="btn btn-success mt-3">Complete Purchase</button>
+            <button className="btn btn-success mt-3" onClick={handleCompletePurchase}>Complete Purchase</button>
               <button className="btn btn-primary mt-3" onClick={handleClearTransaction}>Clear Transaction</button>
             </div>
           </div>
@@ -311,10 +360,10 @@ function PosHome() {
             <p>Branch: {branchName}</p>
           </div>
           <div className="col">
-            <p>Shift ID: 122A</p>
+          <p>Shift ID: {shiftId ? shiftId : 'Shift closed'}</p>
           </div>
           <div className="col">
-            <p>Shift Open Time: 12:00</p>
+            <p>Shift Open Time: {displayTime ? displayTime : '_-_'}</p>
           </div>
           <div className="col">
             <p>Till Operator: {username}</p>
@@ -326,16 +375,25 @@ function PosHome() {
         <div className="row justify-content-end">
           <div className="col-auto">
             <button className="btn btn-danger me-2">
-              <Link to="/inventory" style={{ color: 'inherit', textDecoration: 'none' }}>Inventory</Link>
+              <Link to="/inventory" style={{ color: 'inherit', textDecoration: 'none' }}>&nbsp; POS &nbsp;</Link>
             </button>
             <button className="btn btn-danger me-2">
-              <Link to="/OpenShift" style={{ color: 'inherit', textDecoration: 'none' }}>Start Shift</Link>
+              <Link to="/PettyCash" style={{ color: 'inherit', textDecoration: 'none' }}>Petty Cash</Link>
             </button>
+            <button className="btn btn-danger me-2">
+              <Link to="/inventory" style={{ color: 'inherit', textDecoration: 'none' }}>Inventory</Link>
+            </button>
+            {/* <button className="btn btn-danger me-2">
+              <Link to="/openshift" style={{ color: 'inherit', textDecoration: 'none' }}>Start Shift</Link>
+            </button> */}
             <button className="btn btn-danger me-2">
               <Link to="/EndShift" style={{ color: 'inherit', textDecoration: 'none' }}>End Shift</Link>
             </button>
             <button className="btn btn-danger me-2">
-              <Link to="/PettyCash" style={{ color: 'inherit', textDecoration: 'none' }}>Add Petty Cash</Link>
+              <Link to="/EndShift" style={{ color: 'inherit', textDecoration: 'none' }}>Control Panel</Link>
+            </button>
+            <button className="btn btn-danger me-2">
+              <Link to="/EndShift" style={{ color: 'inherit', textDecoration: 'none' }}>Reports</Link>
             </button>
           </div>
         </div>

@@ -22,7 +22,8 @@ const Menu = () => {
                         <div class="container-fluid dashboard-content">
                             <div class="row">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12" >
-                                    <h1 class="text-center">Main Menu</h1><br></br>
+                                    <h2 class="text-center">REMS Business Suite</h2><br></br>
+                                    <h3 class="text-center" >Main Menu</h3><br></br>
 
                                     <div class='row' style={{ marginLeft: '1%', textAlign: 'center' }}>
 
@@ -32,7 +33,7 @@ const Menu = () => {
                                                     <div class="card-body">
                                                         <h5 class="text-muted">REMS</h5>
                                                         <div class="metric-value d-inline-block">
-                                                            <h1 class="mb-1">Ticketing </h1>
+                                                            <h2 class="mb-1">Ticketing </h2>
                                                         </div>
                                                     </div>
                                                     <div id="sparkline-revenue"></div>
@@ -46,7 +47,21 @@ const Menu = () => {
                                                     <div class="card-body">
                                                         <h5 class="text-muted">REMS</h5>
                                                         <div class="metric-value d-inline-block">
-                                                            <h1 class="mb-1">POS </h1>
+                                                            <h2 class="mb-1">POS </h2>
+                                                        </div>
+                                                    </div>
+                                                    <div id="sparkline-revenue"></div>
+                                                </div>
+                                            </a>
+                                        </div>
+
+                                        <div class="col-xl-3 col-lg-6 col-md-6 col-sm-12 col-12">
+                                            <a href="/posgas">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <h5 class="text-muted">REMS</h5>
+                                                        <div class="metric-value d-inline-block">
+                                                            <h2 class="mb-1">POS Gas </h2>
                                                         </div>
                                                     </div>
                                                     <div id="sparkline-revenue"></div>
@@ -60,7 +75,7 @@ const Menu = () => {
                                                 <div class="card-body">
                                                     <h5 class="text-muted">REMS</h5>
                                                     <div class="metric-value d-inline-block">
-                                                        <h1 class="mb-1">Finance</h1>
+                                                        <h2 class="mb-1">Finance</h2>
                                                     </div>
                                                 </div>
                                                 <div id="sparkline-revenue"></div>
@@ -74,7 +89,7 @@ const Menu = () => {
                                                 <div class="card-body">
                                                     <h5 class="text-muted">REMS</h5>
                                                     <div class="metric-value d-inline-block">
-                                                        <h1 class="mb-1">Payroll</h1>
+                                                        <h2 class="mb-1">Payroll</h2>
                                                     </div>
                                                 </div>
                                                 <div id="sparkline-revenue"></div>

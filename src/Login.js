@@ -3,9 +3,9 @@ import { MD5 } from 'crypto-js';
 import { API_URL } from "./config";
 import { BarLoader } from "react-spinners";
 import Swal from "sweetalert2";
+import { FaEnvelope, FaLock } from 'react-icons/fa';
 
 const Login = () => {
-
     const [email, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [passwordHash, setPasswordHash] = useState('');
@@ -15,144 +15,41 @@ const Login = () => {
         localStorage.clear();
     }, []);
 
-    const checkOtp = (user_email, user_otp) => {
-        console.log('function called');
-        console.log('user email: ', user_email);
-        console.log('user otp: ', user_otp);
-        try {
-            fetch(`${API_URL}/users/user/${user_email}/${user_otp}`)
-                .then(res => res.json())
-                .then(resp => {
-                    console.log('function called 2');
-                    console.log(resp.length);
-                    console.log(resp);
-                    if (resp.length > 0) {
-                        console.log(resp[0].userid);
-                        localStorage.setItem('user', resp[0].userid);
-                        localStorage.setItem('async_client_profile_id', resp[0].client_profile_id);
-                        localStorage.setItem('async_role', resp[0].role);
-                        localStorage.setItem('async_username', resp[0].email);
-                        localStorage.setItem('async_userName', resp[0].username);
-                        localStorage.setItem('branch_id', resp[0].branch_id);
-                        const id = resp[0].userid;
-                        window.location.href = '/passwordsetup';
-                    } else {
-                        Swal.fire({                                            
-                            text: "Login Failed",
-                            icon: "error"
-                          });
-                    }
-                })
-                .catch(err => {
-                    console.log(err.message);
-                    Swal.fire({                                            
-                        text: "Login Failed",
-                        icon: "error"
-                      });
-                    // alert("Login failed, check your network connection!");
-                });
-        } catch (error) {
-            console.log(error);
-            Swal.fire({                                            
-                text: "Login Failed",
-                icon: "error"
-              });
-        }
-    };
-
     useEffect(() => {
         setPasswordHash(MD5(password).toString());
-    }, [password])
+    }, [password]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(passwordHash);
-        try {
-            setIsLoading(true);
-            fetch(`${API_URL}/users/${email}/${passwordHash}`)
-                .then(res => res.json())
-                .then(resp => {
-
-                    if (resp.length === 1) {
-                        console.log(resp.length);
-                        console.log(resp[0].userid);
-                        localStorage.setItem('user', resp[0].userid);
-                        localStorage.setItem('userName', resp[0].username);
-                        localStorage.setItem('async_client_profile_id', resp[0].client_profile_id);
-                        localStorage.setItem('async_role', resp[0].role);
-                        localStorage.setItem('async_username', resp[0].email);
-                        localStorage.setItem('branch_id', resp[0].branch_id);
-
-                        if (resp[0].role === 'Admin') {
-                            window.location.href = '/menu';
-                        } else {
-                            window.location.href = '/menu';
-                        }
-
-                    } else {
-                        try {
-                            fetch(`${API_URL}/users/user/${email}/${password}`)
-                                .then(res => res.json())
-                                .then(resp => {
-                                    console.log('function called 2');
-                                    console.log(resp.length);
-                                    if (resp.length > 0) {
-                                        console.log(resp[0].userid);
-                                        localStorage.setItem('user', resp[0].userid);
-                                        localStorage.setItem('async_client_profile_id', resp[0].client_profile_id);
-                                        localStorage.setItem('async_role', resp[0].role);
-                                        localStorage.setItem('async_username', resp[0].email);
-                                        const id = resp[0].userid;
-                                        window.location.href = '/passwordsetup';
-                                    } else {
-                                        // toast.warning("Login failed, incorrect username or password");
-                                    
-                                        Swal.fire({
-                                            
-                                            text: "Incorrect Username or Password!",
-                                            icon: "error"
-                                          });
-
-                                        setIsLoading(false);
-                                    }
-                                })
-                                .catch(err => {
-                                    console.log(err.message);
-                                    setIsLoading(false);
-                                    
-                                    Swal.fire({                                            
-                                        text: "Login Failed",
-                                        icon: "error"
-                                      });
-                                    // alert("Login failed, check your network connection!");
-                                });
-                        } catch (error) {
-                            console.log(error);
-                            setIsLoading(false);
-                            Swal.fire({                                            
-                                text: "Login Failed",
-                                icon: "error"
-                              });
-                        }
-                    }
-                })
-                .catch(err => {
-                    console.log(err.message);
-                    // alert("Login failed, incorrect username or password");
-                    setIsLoading(false);
-                    Swal.fire({                                            
-                        text: "Login failed, check your netork connection!",
+        setIsLoading(true);
+        fetch(`${API_URL}/users/${email}/${passwordHash}`)
+            .then(res => res.json())
+            .then(resp => {
+                if (resp.length === 1) {
+                    localStorage.setItem('user', resp[0].userid);
+                    localStorage.setItem('userName', resp[0].username);
+                    localStorage.setItem('async_client_profile_id', resp[0].client_profile_id);
+                    localStorage.setItem('async_role', resp[0].role);
+                    localStorage.setItem('async_username', resp[0].email);
+                    localStorage.setItem('branch_id', resp[0].branch_id);
+                    window.location.href = '/menu';
+                } else {
+                    Swal.fire({
+                        text: "Incorrect Username or Password!",
                         icon: "error"
-                      });
+                    });
+                    setIsLoading(false);
+                }
+            })
+            .catch(err => {
+                console.log(err.message);
+                setIsLoading(false);
+                Swal.fire({
+                    text: "Login failed, check your network connection!",
+                    icon: "error"
                 });
-        } catch (error) {
-            console.log(error);
-            setIsLoading(false);
-            Swal.fire({                                            
-                text: "Login Failed",
-                icon: "error"
-              });
-        }
+            });
     };
 
     return (
@@ -165,44 +62,88 @@ const Login = () => {
                 <link href="../assets/vendor/fonts/circular-std/style.css" rel="stylesheet" />
                 <link rel="stylesheet" href="../assets/libs/css/style.css" />
                 <link rel="stylesheet" href="../assets/vendor/fonts/fontawesome/css/fontawesome-all.css" />
+                <style>
+                    {`
+                        .custom-input {
+                            border: none;
+                            padding-left: 10px;
+                            width: 90%;
+                        }
+                        .custom-input:focus {
+                            outline: none; /* Remove default outline */
+                            box-shadow: none; /* Remove any box shadow */
+                        }
+                    `}
+                </style>
             </head>
 
             <body
                 style={{
                     height: '100%',
                     display: '-ms-flexbox flex',
-                    // display: '',
                     msFlexAlign: 'center',
                     alignItems: 'center',
                     paddingTop: '40px',
                     paddingBottom: '40px',
                 }}
             >
-                <div class="splash-container">
-                    <div class="card ">
-                        <div class="card-header text-center"><h2 style={{ color: 'blue' }}>REMS</h2><span class="splash-description">Business Ecosystem
-                        </span></div>
-                        <div class="card-body">
-                            <form>
-                                <div class="form-group">
-                                    <input class="form-control form-control-lg" type="text" value={email} onChange={e => setUsername(e.target.value)} id="email" placeholder="email" autocomplete="off" />
+                <div className="splash-container">
+                    <div className="card ">
+                        <div className="card-header text-center">
+                            <h5 style={{ fontSize: 14, color: 'grey' }}>Welcome to </h5>
+                            <h2 style={{ color: 'blue' }}>REMS</h2>
+                            <span className="splash-description">Business Suite</span>
+                        </div>
+                        <div className="card-body">
+                            <form onSubmit={handleSubmit}>
+                                <div className="row">
+                                    <div className="form-group">
+                                        <div className="form-control form-control-lg">
+                                            <FaEnvelope />
+                                            <input
+                                                type="text"
+                                                className="custom-input" 
+                                                value={email}
+                                                onChange={e => setUsername(e.target.value)}
+                                                id="email"
+                                                placeholder="Email"
+                                                autoComplete="off"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <input class="form-control form-control-lg" type="password" value={password} onChange={e => setPassword(e.target.value)} id="password" required placeholder="Password"/>
+                                <div className="row">
+                                    <div className="form-group">
+                                        <div className="form-control form-control-lg">
+                                            <FaLock />
+                                            <input
+                                                type="password"
+                                                className="custom-input" 
+                                                value={password}
+                                                onChange={e => setPassword(e.target.value)}
+                                                id="password"
+                                                required
+                                                placeholder="Password"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label class="custom-control custom-checkbox">
-                                        <input class="custom-control-input" type="checkbox" /><span class="custom-control-label">Remember Me</span>
+
+                                <div className="form-group">
+                                    <label className="custom-control custom-checkbox">
+                                        <input className="custom-control-input" type="checkbox" />
+                                        <span className="custom-control-label">Remember Me</span>
                                     </label>
                                 </div>
-                                <button onClick={handleSubmit} class="btn btn-primary btn-lg btn-block">Sign in</button>
+                                <button type="submit" className="btn btn-primary btn-lg btn-block" style={{ marginTop: '2rem' }}>Sign in</button>
                             </form>
                         </div>
-                        <div class="card-footer bg-white p-0  ">
-                            <div class="card-footer-item card-footer-item-bordered">
-                                <a href="/account/registration" class="footer-link">Create An Account</a></div>
-                            <div class="card-footer-item card-footer-item-bordered">
-                                <a href="0" class="footer-link">Forgot Password</a>
+                        <div className="card-footer bg-white p-0">
+                            <div className="card-footer-item card-footer-item-bordered">
+                                <a href="/account/registration" className="footer-link">Create An Account</a>
+                            </div>
+                            <div className="card-footer-item card-footer-item-bordered">
+                                <a href="0" className="footer-link">Forgot Password</a>
                             </div>
                         </div>
                         {isLoading && <BarLoader size={40} width={'100%'} color="blue" loading />}
@@ -212,7 +153,7 @@ const Login = () => {
                 <script src="../assets/vendor/jquery/jquery-3.3.1.min.js"></script>
                 <script src="../assets/vendor/bootstrap/js/bootstrap.bundle.js"></script>
             </body>
-        </div >
+        </div>
     );
 }
 
